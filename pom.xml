@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mspr4</groupId>
-    <artifactId>products-api</artifactId>
+    <artifactId>orders-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>products-api</name>
-    <description>products-api</description>
+    <name>orders-api</name>
+    <description>orders-api</description>
     <url/>
     <licenses>
         <license/>
