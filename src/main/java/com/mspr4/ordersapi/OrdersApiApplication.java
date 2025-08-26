@@ -1,13 +1,13 @@
-package com.mspr4.productsapi;
+package com.mspr4.ordersapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProductsApiApplication {
+public class OrdersApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProductsApiApplication.class, args);
+        SpringApplication.run(OrdersApiApplication.class, args);
     }
 
 }
