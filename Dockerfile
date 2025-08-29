@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copier le jar construit par Maven
-COPY target/customer-api-0.0.1-SNAPSHOT.jar app.jar
+COPY target/orders-api-0.0.1-SNAPSHOT.jar app.jar
 
 # Exposer le port de l'application
 EXPOSE 8081
