@@ -1,0 +1,36 @@
+services:
+  customer-db:
+    image: postgres:15
+    container_name: orders-db
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: orders_db
+    ports:
+      - "5434:5434"
+    volumes:
+      - customer_data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+
+  customer-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer-api
+    restart: always
+    depends_on:
+      - orders-db
+    environment:
+      DB_HOST: orders-db
+      DB_PORT: 5434
+      DB_NAME: orders_db
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+    ports:
+      - "8083:8083"
+
+volumes:
+  customer_data:
