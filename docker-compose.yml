@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: customer-api
+    container_name: orders-api
     restart: always
     depends_on:
       - orders-db
