@@ -1,12 +1,13 @@
 package com.mspr4.ordersapi.service;
 
-import com.mspr4.ordersapi.model.Orders;
+import com.mspr4.ordersapi.model.*;
 import com.mspr4.ordersapi.repository.OrdersRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,9 +26,13 @@ class OrdersServiceTest {
         order.setCustomerId(UUID.randomUUID());
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("pending");
-        order.setTotalAmount(new BigDecimal("99.99"));
-        order.setDeliveryAddress("123 Main St");
-        order.setOrderItems("[{\"productId\":\"123\",\"quantity\":2,\"price\":10.5}]");
+
+        OrderItem item = new OrderItem();
+        item.setProductId(UUID.randomUUID());
+        item.setQuantity(2);
+
+// On met la liste dans la commande
+        order.setOrderItems(List.of(item));
 
         when(repository.save(order)).thenReturn(order);
 

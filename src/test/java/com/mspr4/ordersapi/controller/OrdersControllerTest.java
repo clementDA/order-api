@@ -1,13 +1,17 @@
 package com.mspr4.ordersapi.controller;
 
-import com.mspr4.ordersapi.model.Orders;
+import com.mspr4.ordersapi.messaging.OrdersEventPublisher;
+import com.mspr4.ordersapi.model.*;
 import com.mspr4.ordersapi.service.OrdersService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,8 +20,19 @@ import static org.mockito.Mockito.*;
 
 class OrdersControllerTest {
 
-    OrdersService service = mock(OrdersService.class);
-    OrdersController controller = new OrdersController(service);
+    @Mock
+    private OrdersService service;
+
+    @Mock
+    private OrdersEventPublisher eventPublisher;
+
+    @InjectMocks
+    private OrdersController controller;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void getById_shouldReturnOrder() {
@@ -39,14 +54,18 @@ class OrdersControllerTest {
         order.setCustomerId(UUID.randomUUID());
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("pending");
-        order.setTotalAmount(new BigDecimal("50.00"));
-        order.setDeliveryAddress("123 Main St");
-        order.setOrderItems("[{\"productId\":\"123\",\"quantity\":2,\"price\":10.5}]");
+        OrderItem item = new OrderItem();
+        item.setProductId(UUID.randomUUID());
+        item.setQuantity(2);
 
+
+        order.setOrderItems(List.of(item));
         when(service.saveOrder(order)).thenReturn(order);
 
         ResponseEntity<Orders> response = controller.create(order);
         assertEquals(201, response.getStatusCodeValue());
         assertEquals(order.getOrderId(), response.getBody().getOrderId());
+
+        verify(eventPublisher, times(1)).publishOrderCreated(order);
     }
 }
